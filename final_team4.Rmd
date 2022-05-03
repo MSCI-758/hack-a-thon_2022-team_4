@@ -1,14 +1,18 @@
 ---
 title: "Group 4 Hackathon"
-author: "Abigail Kreuser"
+author: "Abigail Kreuser, Peggy Bernish, Chloe Keck, Gwen Hopper"
 date: '2022-05-02'
 output: html_document
 ---
 # SPELL CHECK THIS
-## change authors  
+
 
 Intro:
-Our group found that the priority ranking was a vauge indicator of the differences among the impaired water bodies. We looked for realationships between priotity ranking and basin, cause, and use. We further investigate the causes of water body impairment in the 2018 data to disseminate trends. 
+Our group found that the priority ranking was a vague indicator of the differences among the impaired water bodies. The majority of the impaired water bodies on the 303d list were ranked as a `3`, which   We looked for realationships between priotity ranking and basin, cause, and use. We further investigate the causes of water body impairment in the 2018 data to disseminate trends. 
+
+
+
+
 
 ### Priority ranks
 
@@ -19,24 +23,85 @@ The priority ranks are defined as:
 alternative restoration plans being developed during the 2016-2018 time-frame.
 
 
-2 = __Near-Term Priorities__ are those site/pollutant combinations being addressed by TMDL or
-alternative restoration plans being developed during the 2019-2022 time-frame.
+2 = __Near Term Priorities__ are those site/pollutant combinations being addressed by TMDL or alternative restoration plans being developed during the 2019-2022 time-frame.
 
 
-3 = __Long-Term Priorities__ are those site/pollutant combinations being addressed by TMDL or
+3 = __Long Term Priorities__ are those site/pollutant combinations being addressed by TMDL or
 alternative restoration plans being developed after 2022.
 
 ## Basin and priority rank:
-impaired vs non imparied 
-Gwen script- maybe make a map, run a t-test, 
 
-Maggie making histogram now
+![Uses of all sites assessed for 2018 303d list. The basin regions are outlined in dark grey.](figures/prank_basins_barplot.png){width=70%}
 
+Gwen script- run a t-test
+Basin summary - table
+Basins: 
 
+?? General - percent table made by gwen!! 
 
 
 ### Priority rank and use
+# captions kind of suck, {width = 50%} probably needed
+ 
+![Uses of all sites assessed for 2018 303d list. The basin regions are outlined in dark grey.](figures/SC_use_map.png){width=60%}
 
 
-Basins: 
 
+Uses are as follows:
+
+* AL = Aquatic Life
+* FISH = Fish consumption
+* REC = Recreation
+* SHELLFISH = Shellfish Harvesting
+
+
+
+![Count of uses and priority.](figures/prank_uses_barplot.png){width=50%}
+### Maybe make this barchart shorter in ggsave 
+
+
+Aquatic life contains the only impairment listed as a priority ranking of 1. Fish is the only use that does not contain a priority ranking other than 3. Recreational and shellfish include 2 and 3 rankings. A priority rank of 3 being the majority of rankings across all uses. 
+
+Although aquatic life is the majority use (n=590), we were surprised to find that it is the only use that had was being addressed or had a developing plan for addressing pollutants because we assumed water bodies being used for shellfish, fish, and recreation pose a larger threat to human health.  
+
+
+### Causes and priority rank: 
+
+
+
+
+
+
+![PEGGY WRITE THIS CAPTION.](figures/prank_causes_barplot.png){width=45%} ![PEGGY WRITE THIS CAPTION.](figures/causes_basins_heatmap.png){width=45%}
+
+## y-axis wrong label @peggy plz fix ;)
+
+The ratio of priority rank for each cause could indicate that the causes with near term priority, rank=2, solutions already exist for TMDL to apply or are possible to develop plans for restoration. Total nitrogen (TN) and lead (PB) have a majority of near term priority rankings. Total phosphorous (TP), hydrogen ion concentration (PH), and *Escherichia coli* (ECOLI) have more priorty rank =2 than others --- THIS AINT GREAT IDK IF WE WANT TO SAY ANYTHING ABOUT THEM. 
+The heat map above of cause by basin, highlights the variation of frequency by cause between the basins. The most prevalent causes biological (BIO), mercury (HG), dissolved oxygen (DO), and *Escherichia coli* (ECOLI) vary in frequency among the basins. Management plans by use and basin may be an efficient mode of planning. 
+
+
+
+![Water bodies that have 2 causes attributed to their impairment.](figures/heatmap_2causes.png){width=70%}
+
+Biological as a cause is missing from this heatmap, and it is not listed on the causes in the explanation of the data. Common pairings of causes include dissolved oxygen (DO) & hydrogen ion concentration (PH), mercury (HG) & polychlorinated biphenyls (PCB), total phosphorus (TP) & total nitrogen (TN), and chlorophyll-a (CHLA) & hydrogen ion concentration (PH). 
+
+
+### Causes and use 
+
+![PEGGY WRITE THIS CAPTION.](figures/AL_Uses_Causes_TEST_ALL_again.png)
+
+
+A - Aquatic Life 
+B - FISH???
+C - Recreation
+D - SHELLFISH??
+
+MAYBE CHANGE GGSAVE WIDTH SO A x-axis is less squished??? 
+Aquatic life, most varied cause 
+Would it be possible to have similar responses to or plans, for B-D.
+
+
+## Conclusion:
+Priority rank is not a clear indicator of risk or importance, but is only a measure of DHEc planning for implementing solutions to water bodies. The most clear patterns we found were between use and cause see figure XX SHOULD WE LABEL FIGURES??? 
+
+Auquatic life had the most impariments, and the most variation in causes. We were surprised by ranking and the only actively managed water body in 2018 being AL. 

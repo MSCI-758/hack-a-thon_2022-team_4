@@ -16,7 +16,7 @@ dim(imp) # 1979-861 = 1118 rows
 
 summary(imp)
 names(imp) <-  c("priorityRank", "note", "basin", "huc_12", "county", "description", "station", "use", "cause")
- summary(imp)      
+summary(imp)      
 
 unique(imp$cause)
 
@@ -88,8 +88,7 @@ causePR_df
 test <- imp_cause %>%
   count(cause1, cause2, cause3, cause4)
 
-
-
+table(imp_cause$totalCause)
 
 apply(imp_cause[,c("cause1", "cause3")], 2, table)
 
@@ -113,16 +112,18 @@ ggplot(data = cause2_df)+
 #make a heatmap of those with 2 causes?? see if there is relation
 #### heatmap-geom tile
 heatmap_cause= cause2_df %>% 
-  select(basin, cause1, cause2) %>%
+  select(cause1, cause2) %>%
   group_by(cause1, cause2) %>%
   summarize(n=n()) %>%
   arrange(desc(n))
+
 ### uhhh trying to do the heatmap idea
 library(viridis)
-
+dim(heatmap_cause)
+sum(heatmap_cause$n)
 
 #install.packages('viridis')
-ggplot()+
+heatmap_2causes <- ggplot()+
   geom_tile(data=heatmap_cause, aes(x=cause2, y=cause1, fill=n),
             color="white",
             lwd =1.5,
@@ -132,16 +133,11 @@ ggplot()+
   labs(fill="count", )+
   theme(axis.text.x= element_text(angle = 90, vjust=0.5, hjust=1))+
   scale_fill_viridis(option="rocket", begin=0.1)
-  
- 
-
-
-ggplot(data = cause2_df)+
-  geom_tile(aes(x=cause2, y=cause1))
+ggsave(heatmap_2causes, file="figures/heatmap_2causes.png", width=5, height = 6)
 
 
 
-#maggie cause 
+# maggie cause split
 imp = read_csv("data/2018303d_final.csv") # SC Impaired Waters List 303d for 2018
 names(imp) <- c("prank","note","basin","huc12","county","desc","station","use","cause")
 # generating new rows to deal with multiple causes - for Abby
