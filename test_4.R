@@ -1,7 +1,6 @@
 
 library(tidyverse)
 library(sf)
-library(tidyverse)
 library(ggpubr)
 library(gridExtra)
 library(wesanderson)
@@ -74,56 +73,33 @@ SHELLFISH_plot <- imp_new %>%
   filter(use=="SHELLFISH")
 
 
-
-
-cols <- c("8" = "red", "4" = "blue", "6" = "darkgreen", "10" = "orange")
-ggplot(
-  AL_plot,
-  aes(x=basin,colour = factor(cause), fill = factor(cause))
-) +
-  geom_bar(stat="identity") +
-  scale_colour_manual(
-    values = myColors,
-    aesthetics = c("colour", "fill")
-  )
-
-
-
-cols = scale_colour_manual(rainbow(19, rev=TRUE))
-myColors <- rainbow(19, rev=TRUE)
-names(myColors) <- unique(imp_new$cause)
-colScale <- scale_colour_manual(name = "cause",values  = myColors)
-
 p1<-ggplot(data=AL_plot,aes(y=basin,fill=cause))+
   geom_bar()+
-  theme_bw() + 
   labs(fill="Cause",y="Basin") +
-  #scale_colour_manual(values = myColors)
-  cols
-p1
+  theme_classic2()+
+  scale_fill_viridis(option="rocket",begin=0.1,discrete = TRUE)
 
-p2<-ggplot()+
-  geom_bar(data=FISH_plot,aes(y=basin,fill=cause))+
-  theme_bw() + 
-  labs(fill="Cause",y="Basin")+
-  scale_colour_discrete(type=myColors)
-  #scale_colour_manual(values = myColors)
-p2
 
-p3<-ggplot()+
-  geom_bar(data=REC_plot,aes(y=basin,fill=cause))+
-  theme_bw() + 
-  labs(fill="Cause",y="Basin")+
-  colScale
+p2<-ggplot(data=FISH_plot,aes(y=basin,fill=cause))+
+  geom_bar()+
+  labs(fill="Cause",y="Basin") +
+  theme_classic2()+
+  scale_fill_viridis(option="rocket",begin=0.1,discrete = TRUE)
 
-p4<-ggplot()+
-  geom_bar(data=SHELLFISH_plot,aes(y=basin,fill=cause))+
-  theme_bw() + 
-  labs(fill="Cause",y="Basin")+
-  colScale
+p3<-ggplot(data=REC_plot,aes(y=basin,fill=cause))+
+  geom_bar()+
+  labs(fill="Cause",y="Basin") +
+  theme_classic2()+
+  scale_fill_viridis(option="rocket",begin=0.1,discrete = TRUE)
 
-bigplot=ggarrange(p1,p2,p3,p4,ncol =4,nrow=1,labels=c("A","B","C","D"),common.legend=TRUE)
-ggsave(bigplot,filename='figures/AL_Uses_Causes_TEST_ALL_uh.png',device="png",height=8,width=14)
+p4<-ggplot(data=SHELLFISH_plot,aes(y=basin,fill=cause))+
+  geom_bar()+
+  labs(fill="Cause",y="Basin") +
+  theme_classic2()+
+  scale_fill_viridis(option="rocket",begin=0.1,discrete = TRUE)
+
+bigplot=ggarrange(p1,p2,p3,p4,ncol =4,nrow=1,labels=c("A","B","C","D"),common.legend=FALSE)
+ggsave(bigplot,filename='figures/AL_Uses_Causes_TEST_ALL_again.png',device="png",height=5,width=14)
 
 # For the purpose of looking at various causes of impairment in the various water bodies, the
 # causes were separated out into different rows in order to count each cause once (ie. in 
@@ -172,4 +148,49 @@ model.matrix(~0+., data=imp_new$cause) %>%
   cor(use="pairwise.complete.obs") %>% 
   ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
 
-heat_map
+
+## Correlation heatmap of uses and causes 
+heatmap_cause= imp_new %>% 
+  select(basin, cause, use,county) %>%
+  group_by(cause, basin) %>%
+  summarize(n=n()) %>%
+  arrange(desc(n))
+### uhhh trying to do the heatmap idea
+library(viridis)
+
+ggplot()+
+  geom_tile(data=heatmap_cause, aes(x=cause, y=county, fill=n))+
+  theme_bw()
+
+
+
+### uhhh trying to do the heatmap idea
+library(viridis)
+p1 <- ggplot()+
+  geom_tile(data=heatmap_cause, aes(y=cause, x=basin, fill=n),color = "white",
+            lwd = 1.5,
+            linetype = 1)+
+  theme_classic2()+
+  coord_fixed()+
+  labs(fill="count")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  scale_fill_viridis(option="rocket",begin=0.1)
+ggsave(p1,filename='figures/causes_basins_heatmap.png',device="png",height=10,width=8)
+
+
+
+## Histogram/barplot of basin and cause, grouped into p-rank?
+imp_group = imp_new %>%
+  group_by(cause,use,prank)
+p12 <-ggplot()+
+  geom_bar(data=imp_group,aes(y=cause,fill=as.factor(prank)))+
+  theme_bw() + 
+  labs(fill="P Rank",y="Use")+
+  scale_fill_viridis(option="rocket",discrete=TRUE,direction=-1,begin=.2,end=.6)
+p12
+ggsave(p11,filename='figures/prank_causes_barplot.png',device="png",height=10,width=8)
+
+
+
+ggplot(data = df2, aes(Study_Group, prop, fill = Genotypes)) + 
+  geom_bar(stat = "identity", position = "dodge")
