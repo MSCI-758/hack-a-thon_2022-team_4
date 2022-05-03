@@ -8,7 +8,7 @@ output: html_document
 
 
 Intro:
-Our group found that the priority ranking was a vague indicator of the differences among the impaired water bodies. The majority of the impaired water bodies on the 303d list were ranked as a `3`, which   We looked for realationships between priotity ranking and basin, cause, and use. We further investigate the causes of water body impairment in the 2018 data to disseminate trends. 
+The 303d list identifies impaired water bodies within each state, listing uses of the water body and causes of impairment. The goal of our project was to understand the relationship between causes of impairment and priority ranking. We hypothesized that basins with an increased number of impaired waters due to a multitude of causes would rank higher in priority. To test this hypothesis, we looked for relationships between priority ranking with respect to basin, cause, and use utilizing data from the 2018 303d list to disseminate trends. 
 
 
 
@@ -32,13 +32,29 @@ alternative restoration plans being developed after 2022.
 ## Basin and priority rank:
 
 ![Uses of all sites assessed for 2018 303d list. The basin regions are outlined in dark grey.](figures/prank_basins_barplot.png){width=70%}
+From the above figure, we see that the number of priority rankings ranges from approximately 80 in the Broad basin to about 280 for the Pee Dee. We also observed that the Catawba has a larger number of higher ranked waters than any other basin. Finally, we observed that most of the water bodies within each basin have been listed as priority 3.  Our next steps were to examine how much of each basin hosts impaired water bodies and to look at uses and causes of impairment. 
 
-Gwen script- run a t-test
-Basin summary - table
-Basins: 
+BROAD_IMPAIRED=(79/(79+117))*100
+CATAWBA_IMPAIRED=(104/(32+104))*100
+EDISTO_IMPAIRED=(95/(95+95))*100
+PEEDEE_IMPAIRED=(229/(229+170))*100
+SALKEHATCHIE_IMPAIRED=(128/(128+171))*100
+SALUDA_IMPAIRED=(121/(121+76))*100
+SANTEE_IMPAIRED=(171/(171+260))*100
+SAVANNAH_IMPAIRED=(113/(113+177))*100
 
-?? General - percent table made by gwen!! 
+basin_percent_imp<- rbind(BROAD_IMPAIRED, CATAWBA_IMPAIRED, EDISTO_IMPAIRED, PEEDEE_IMPAIRED, SALKEHATCHIE_IMPAIRED,SALUDA_IMPAIRED,SAVANNAH_IMPAIRED)
+  
+basin_percent_imp <- as.data.frame.matrix(basin_percent_imp)
 
+basin_percent_imp$V1 <- round(basin_percent_imp$V1, 0)
+
+names(basin_percent_imp) <- "percent"
+
+
+t.test(basin_percent_imp)
+
+From the above table, we see that the percent impairment for South Carolina basins ranges from 39% to 76%. The Catawba has the largest percent of impaired water bodies which corresponds with this basin also having the highest number of priority 2 rankings. Based on the large number of basins with priority rankings of 3, we decided to run a t-test using a 95% confidence interval to determine if the percent impairment of each basin is significant, and indeed they were (p = 5e-05). Seeing that priority rankings do not completely reflect percent impairment for each basin, our next step was to examine the relationship between priority rank and use.
 
 ### Priority rank and use
 # captions kind of suck, {width = 50%} probably needed
@@ -102,6 +118,7 @@ Would it be possible to have similar responses to or plans, for B-D.
 
 
 ## Conclusion:
-Priority rank is not a clear indicator of risk or importance, but is only a measure of DHEc planning for implementing solutions to water bodies. The most clear patterns we found were between use and cause see figure XX SHOULD WE LABEL FIGURES??? 
+After analyzing basin data provided from the 2018 303d list, we found that priority rank is not a clear indicator of risk or importance, but is only a measure of DHEC plans for implementing solutions to water bodies. The most clear patterns we found were between use and cause see figure XX SHOULD WE LABEL FIGURES??? 
+
 
 Auquatic life had the most impariments, and the most variation in causes. We were surprised by ranking and the only actively managed water body in 2018 being AL. 
