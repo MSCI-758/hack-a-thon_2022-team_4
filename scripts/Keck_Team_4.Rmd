@@ -1,0 +1,114 @@
+---
+title: "KECK Team 4"
+author: "Chloe MT Keck"
+date: "4/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction
+For this section of the Hack-a-thon, we examined the relationship between water use and priority ranking of the impared waterbodies in the 2018 data set. `use` can either be `SHELLFISH`, referring to shellfish consumption; `REC`, referring to recreational use such as swimming; `FISH`, referring to fish consumption; or `AL`, referring to aquatic life. Priority ranking ranges between 1-3, each level corresponding to the severity of impairment. 
+
+
+1 = __Current Priorities__ are those site/pollutant combinations being addressed by TMDL or
+alternative restoration plans being developed during the 2016-2018 time-frame.
+
+
+2 = __Near-Term Priorities__ are those site/pollutant combinations being addressed by TMDL or
+alternative restoration plans being developed during the 2019-2022 time-frame.
+
+
+3 = __Long-Term Priorities__ are those site/pollutant combinations being addressed by TMDL or
+alternative restoration plans being developed after 2022.
+
+
+### Use vs. priority ranking 
+
+```{r, include=FALSE}
+library(tidyverse)
+library(sf)
+
+imp = read.csv("data/2018303d_final.csv") #read impaired waters data set 
+names(imp) <-  c("PRIORITY.RANK", colnames(imp)[2:8], "CAUSE")
+
+imp = imp %>%
+  filter(PRIORITY.RANK != "")
+
+names(imp) = c("priority_rank", "note", "basin", "huc_12", "county", "description", "station", "use", "cause")
+
+unique(imp$use)
+
+basin = st_read("data/SC_Major_River_Basins", "SC_Major_River_Basins")
+shp_imp = st_read("data/bw.SDE.DHEC_303D_18", "bw.SDE.DHEC_303D_18")
+shp_imp = shp_imp %>%
+  filter(!is.na(USE_))
+```
+
+When examining the relationship between use and priority ranking, we visualized the data below using a histogram. 
+
+```{r}
+ggplot(data = imp) +
+  geom_histogram(aes(x = use, fill = priority_rank), stat = "count", binwidth = 5) +
+  coord_flip()
+```
+
+To get a closer look, we created a histogram examining the distribution of priority ranking for each of the uses. 
+
+### SHELLFISH 
+The impaired water bodies designated for shellfish consumption were composed of almost entirely priority 3, meaning the impairment will be addressed at a later date. 
+```{R}
+imp_SHELLFISH = imp %>%
+  filter(use =="SHELLFISH")
+
+ggplot(data = imp_SHELLFISH) +
+  geom_histogram(aes(x = priority_rank), stat = "count", binwidth = 5)
+```
+
+
+### FISH 
+Similar to shellfish consumption, fish consumption sites are all labeled as level 3 priority ranking. 
+```{r}
+imp_FISH = imp %>%
+  filter(use == "FISH")
+
+ggplot(data = imp_FISH) +
+  geom_histogram(aes(x = priority_rank), stat = "count", binwidth = 5)
+```
+
+### REC 
+Recreationally used impared waters had a slightly higher amount of 2 priority ranks; however, recreation is still mostly composed of water bodies with a 3 priority rank. 
+```{r}
+imp_REC = imp %>%
+  filter(use == "REC")
+
+ggplot(data = imp_REC) +
+  geom_histogram(aes(x = priority_rank), stat = "count", binwidth = 5)
+```
+
+### AL
+Aquatic life use has the most variable priority rankings. __Aquatic life contains the only impairment listed as a priority ranking of 1__. Additionally, five of the impaured bodies are listed as multiple priority rankings (i.e. `2,2,3`; `2, 3`; and `3,2,3`). According to these data, __the aquatic life use is both the most variable and the most prioritized impairment use__. 
+```{r}
+imp_AL = imp %>%
+  filter(use == "AL")
+
+ggplot(data = imp_AL) +
+  geom_histogram(aes(x = priority_rank), stat = "count", binwidth = 5)
+```
+
+### Spatial distribution of use 
+
+Furthermore, we visualized the distribution of uses below. As revealed by the figure, shellfish consumption is concentrated on the coast of South Carolina. Fish consumption is concentrated on the eatern side of the state. Aquatic life is concentrated on the north-western area of the state. 
+
+
+```{r}
+ggplot() +
+  geom_sf(data = basin) +
+  geom_sf(data = shp_imp, aes(color = USE_)) 
+```
+
+
+
+
